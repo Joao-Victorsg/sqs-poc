@@ -3,6 +3,7 @@ package com.example.sqspoc.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.awspring.cloud.sqs.config.SqsListenerConfigurer;
 import io.awspring.cloud.sqs.config.SqsMessageListenerContainerFactory;
 import io.awspring.cloud.sqs.support.converter.MessagingMessageConverter;
@@ -22,12 +23,10 @@ public class SqsConfig {
 
     @Bean
     public ObjectMapper objectMapper(){
-        final var objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-        //objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        //objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        return objectMapper;
+        return new ObjectMapper()
+                .findAndRegisterModules()
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 
     @Bean
