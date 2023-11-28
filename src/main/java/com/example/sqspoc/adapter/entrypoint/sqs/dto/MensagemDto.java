@@ -7,15 +7,15 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 
 @Builder
-@JsonDeserialize(builder = Mensagem.MensagemBuilder.class)
+@JsonDeserialize(builder = MensagemDto.MensagemDtoBuilder.class)
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record Mensagem (
+public record MensagemDto(
 
         @JsonProperty
         String idMensagem,
         @JsonProperty
         String tipoMensagem,
         @JsonProperty
-        Payload payload
+        PayloadDto payloadDto
 ){
 }

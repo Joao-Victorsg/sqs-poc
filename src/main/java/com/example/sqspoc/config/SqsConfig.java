@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.awspring.cloud.sqs.config.SqsListenerConfigurer;
 import io.awspring.cloud.sqs.config.SqsMessageListenerContainerFactory;
+import io.awspring.cloud.sqs.listener.acknowledgement.handler.AcknowledgementMode;
 import io.awspring.cloud.sqs.support.converter.MessagingMessageConverter;
 import io.awspring.cloud.sqs.support.converter.SqsMessagingMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +65,8 @@ public class SqsConfig {
     public SqsMessageListenerContainerFactory sqsMessageListenerContainerFactory(SqsAsyncClient sqsAsyncClient,MessagingMessageConverter messageConverter){
         return SqsMessageListenerContainerFactory.builder()
                 .sqsAsyncClient(sqsAsyncClient)
-                .configure(options -> options.messageConverter(messageConverter))
+                .configure(options -> options.messageConverter(messageConverter)
+                        .acknowledgementMode(AcknowledgementMode.MANUAL))
                 .build();
     }
 }

@@ -1,12 +1,18 @@
 package com.example.sqspoc.adapter.output.sqs;
 
-import com.example.sqspoc.adapter.entrypoint.sqs.dto.Mensagem;
-import com.example.sqspoc.adapter.entrypoint.sqs.dto.Payload;
+import com.example.sqspoc.adapter.entrypoint.sqs.dto.MensagemDto;
+import com.example.sqspoc.adapter.entrypoint.sqs.dto.PayloadDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.awspring.cloud.sqs.MessageHeaderUtils;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,17 +46,21 @@ public class Publisher {
     public void send(){
         final var sqsTemplate = SqsTemplate.newAsyncTemplate(sqsAsyncClient);
 
-        final var mensagem = Mensagem.builder()
+        final var mensagem = MensagemDto.builder()
                 .idMensagem("123")
                 .tipoMensagem("teste")
-                .payload(Payload.builder()
+                .payloadDto(PayloadDto.builder()
                                 .nome("Vasco")
                                 .valor(123L)
                                 .cor("Azul")
                                 .build())
                 .build();
 
-        sqsTemplate.sendAsync("teste",mensagem);
+        final var mensagemPronta = MessageBuilder.createMessage(
+                mensagem,
+                new MessageHeaders(Map.of("correlationId","123","transactionId","123")))    ;
+
+        sqsTemplate.sendAsync("teste",mensagemPronta);
     }
 
 }

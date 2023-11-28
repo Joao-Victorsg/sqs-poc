@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 
 @Builder
-@JsonDeserialize(builder = Payload.PayloadBuilder.class)
-public record Payload(
+@JsonDeserialize(builder = PayloadDto.PayloadDtoBuilder.class)
+public record PayloadDto(
         @JsonProperty
         String nome,
         @JsonProperty
